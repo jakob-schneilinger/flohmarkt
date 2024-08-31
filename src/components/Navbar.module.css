@@ -1,0 +1,64 @@
+/* src/components/Navbar.module.css */
+.navbar {
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 100px;
+    background-color: var(--primary);
+    gap: 20px;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.2);
+    z-index: 99;
+  }
+  
+  .navbarLogo a {
+    color: var(--dark);
+    font-size: 24px;
+    text-decoration: none;
+    font-weight: 400;
+  }
+  
+  .navbarLinks {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+  }
+  
+  .navbarLinks li {
+    display: inline;
+    position: relative;
+  }
+  
+  .navbarLinks a {
+    color: var(--dark);
+    text-decoration: none;
+    font-size: 18px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+    transition: color 0.2s ease-in-out;
+  }
+  
+  .navbarLinks a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background-color: transparent;
+    border-bottom: 1.5px solid transparent;
+    transition: transform 0.2s ease-in-out;
+    z-index: -1;
+  }
+  
+  .navbarLinks a:hover::after {
+    transform: scaleX(1.1) scaleY(1.2);
+    border-bottom: 1.5px solid var(--dark); /* Optional: Underline effect */
+  }
+  
+  .navbarLinks a:hover {
+    color: var(--dark);
+  }
