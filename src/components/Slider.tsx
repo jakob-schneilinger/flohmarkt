@@ -8,31 +8,12 @@ interface SliderProps {
   time?: number; // Optional prop to control slider speed in milliseconds
 }
 
-const Slider: React.FC<SliderProps> = ({ time = 5000 }) => { // Default to 5000ms if time is not provided
-  const [currentIndex, setCurrentIndex] = useState(0);
+const Slider: React.FC<SliderProps> = ({ time = 5000 }) => {
+  const [currentIndex, setCurrentIndex] = useState(0); // Start at 1 due to the prepended duplicate slide
   const [isPaused, setIsPaused] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
+  const sliderRef = useRef<HTMLDivElement>(null);
   const totalSlides = SliderImages.length;
-
-  const handlePrev = () => {
-    setIsPaused(true);
-    setCurrentIndex((prevIndex) => 
-      prevIndex === 0 ? totalSlides - 1 : prevIndex - 1
-    );
-    setTimeout(() => {
-      setIsPaused(false);
-    }, time);
-  };
-
-  const handleNext = () => {
-    setIsPaused(true);
-    setCurrentIndex((prevIndex) => 
-      prevIndex === totalSlides - 1 ? 0 : prevIndex + 1
-    );
-    setTimeout(() => {
-      setIsPaused(false);
-    }, time);
-  };
 
   useEffect(() => {
     if (isPaused || isZoomed) return;
@@ -42,7 +23,25 @@ const Slider: React.FC<SliderProps> = ({ time = 5000 }) => { // Default to 5000m
     }, time);
 
     return () => clearInterval(interval);
-  }, [time, totalSlides, isPaused, isZoomed]);
+  }, [time, isPaused, isZoomed]);
+
+  const handlePrev = () => {
+    setIsPaused(true);
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? totalSlides - 1 : prevIndex - 1
+    );
+    setTimeout(() => {
+      setIsPaused(false);
+    }, time);
+  };
+
+  const handleNext = () => {
+    setIsPaused(true);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalSlides);
+    setTimeout(() => {
+      setIsPaused(false);
+    }, time);
+  };
 
   const handleZoom = () => {
     setIsZoomed(true);
@@ -58,6 +57,7 @@ const Slider: React.FC<SliderProps> = ({ time = 5000 }) => { // Default to 5000m
     <div className={styles.sliderContainer}>
       <div className={styles.slider}>
         <div
+          ref={sliderRef}
           className={styles.sliderInner}
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
@@ -84,7 +84,7 @@ const Slider: React.FC<SliderProps> = ({ time = 5000 }) => { // Default to 5000m
 
       {/* Zoomed-in view */}
       {isZoomed && (
-        <div className={styles.zoomedImageContainer}>
+        <div className={styles.zoomedImageContainer} onClick={handleCloseZoom}>
           <Image
             src={SliderImages[currentIndex]}
             alt={`Slide ${currentIndex}`}

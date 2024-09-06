@@ -1,0 +1,16 @@
+.centeredText {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.centeredText p {
+    font-size: 25px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.centeredText p a {
+    text-decoration: underline;
+}
